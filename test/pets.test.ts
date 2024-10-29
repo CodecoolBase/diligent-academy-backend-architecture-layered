@@ -3,8 +3,8 @@ import createApp from "../src/app"
 
 let app: FastifyInstance | undefined;
 
-beforeEach(() => {
-  app = createApp({ logger: false });
+beforeEach(async () => {
+  app = await createApp({ logger: false });
 })
 
 describe('POST /pets', () => {
