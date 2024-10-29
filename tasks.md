@@ -1,7 +1,5 @@
 # Tasks
 
-Use the [api.md](./api.md) to document your solution.
-
 ## Use Case
 
 - We are going to create a server that manage a pet keeping application, like Tamagochies, similar to Tetova Teve Club, Hosemberkepzo.
