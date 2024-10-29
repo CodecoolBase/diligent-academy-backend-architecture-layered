@@ -2,70 +2,76 @@
 
 Use the [api.md](./api.md) to document your solution.
 
-## Use case
+## Use Case
 
-- We to create an API for a movie database.
-- We want to store the movie's title, genres, plot, release date and of course the actors.
-- In our api we want to list the actors for the given movie.
-- We want to list a specific actor's movies too.
-- The information we want to store for an actor: name, the born date, the born location and their height.
-- When we are listing a movie, it is enough to show the title and the release data.
-- When we are listing an actor, it is enough to show their name and height.
-- Each movie and actor has a unique numeric ID.
-- We also want to add, remove and edit movies and actors individually.
-- We want to make partial update on the movies and the actors.
-- We want to assign an actor to a movie and also remove an actor from a movie.
-- We also want to search for the movie by title and genre.
-- We want to search for the actors by name.
+- We are going to create a server that manage a pet keeping application, like Tamagochies, similar to Tetova Teve Club, Hosemberkepzo.
+- The user can create a new pet.
+- The user can get the list of pets.
+- The user can get the status of one pet.
+- The user the user can feed a given pet.
+- The user can make older a pet of one day.
 
-### Background materials
+When a day passes, the pet behaves like this:
 
-- [How to design a REST API?](https://restfulapi.net/rest-api-design-tutorial-with-example/)
-- [HTTP methods](https://restfulapi.net/http-methods/)
-- [Resource naming](https://restfulapi.net/resource-naming/)
+- If there is food in front of it, it eats it. Hence the food is decreased by one and its weight increased by one.
+- If there is no food in front of the pet, its weight is decreased by one if at least it has one weight.
+- If the pet's weight goes to zero, unfortunately it is dead.
+- When a pet is dead it is not possible to feed them or make it older.
 
-## 1: Identify the resources of this API
+## Task 1: Get to know your code
 
-- List the resources without details in the `api.md`.
+Answer these questions:
 
-## 2: Plan the URIs for the resources
+- What is the entrypoint of this application?
+- How can we start a dev server?
+- Where can you find the API specification?
+- What endpoints are currently implemented?
 
-- Based on the use case description above plan the URIs for the single resource.
-- Plan the URIs for the collection resource.
-- Plan the URIs for the sub-collections (e.g. the list of actors for a movie) for 
-the collections and single resources.
+## Task 2: Refactor our code
 
-Document your URIs in the proper part of the `api.md`.
+Answer these questions:
 
-You do not need to add now neither the HTTP methods nor the
-representation.
+- What is the problem with the code from clean coding point of view?
+- What kind of concerns can you recognize in the `app.ts`?
+- What kind of tests are easy to write to this code?
 
-## 3: Design representation for the resources
+Refactor the code to the *Layered Architecture* layers: Presentational Layer, Business Logic Layer, Data Access Layer.
 
-- Use JSON representation for this task
-- Design the representations of single resources.
-- Design the representations of collection resources.
-- Right now we can assume that in a sub-collection a single resource
-contains the same information as the single resource own their own.
-- Also the collections in the sub-collections contains the same info
-as the collections on their own.
-- Optionally you can add hypermedia links.
+- Use services to the business logic.
+- Use repositories to the data access.
 
-Hint: You can create JSON formatted strings in an md file using
-the following syntax, e.g. for a pet.
+## Task 3: Get one pet's status
 
-```json
-{
-  "name": "Fluffy",
-  "age": 4,
-  "breed": "Maine Coon",
-  "kind": "cat"
-}
-```
+**User Story:** As a pet keeper I can get the details of my pet, so I can decide what actions I can perform on it.
 
-## 4: Add HTTP methods
+- Implement a new endpoint `GET /pets/:id`.
+- Implement the business logic to the right place.
+- Use the data access layer to accomplish the task.
+- Use the API definition to accomplish the endpoint's requirements.
+- Optional: Create tests for this use case.
 
-- Based on the use case description add the HTTP methods for the resources.
-- List the HTTP method + URI describe the specific use case.
-- List them for the association / dereference too.
+Hint: You can return `null` from the business logic layer to indicate that a pet is not found. Another option is throw a custom exception and catch it in the Presentational layer. 
+
+## Task 4: Feed the pet
+
+**User Story:** As a pet keeper I can feed my pet, so I can save it from starving.
+
+- Implement the new endpoint `POST /pets/{petId}/food`.
+- It should increase the pet's food property by one.
+- Handle the pet not found and pet is dead status codes.
+- Optional: Create tests for this use case.
+
+Hint: you can throw different custom exceptions from the business logic layer, catch them in the presentational layer
+and create replies based on that.
+
+## Task 5: Make the pet older
+
+**User Story:** As a pet keeper I can feed my pet, so I can save it from starving.
+
+- Implement the new endpoint `POST /pets/{petId}/age`.
+- It should implement the day passes logic described above
+- Handle the pet not found and pet is dead status codes.
+- Optional: Create tests for this use case.
+
+
 

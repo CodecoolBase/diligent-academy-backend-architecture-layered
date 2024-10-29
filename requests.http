@@ -2,4 +2,11 @@
 
 ###
 
-GET {{host}}/hello
+POST {{host}}/pets
+Content-Type: application/json
+
+{ "name": "Snowball" }
+
+###
+
+GET {{host}}/pets

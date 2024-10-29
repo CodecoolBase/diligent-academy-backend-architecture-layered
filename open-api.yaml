@@ -3,6 +3,8 @@ info:
   title: Keep My Pet
   version: 1.0.0
   description: Keep your pet API.
+servers:
+  - url: http://localhost:4400
 paths:
   /pets:
     post:

@@ -9,12 +9,15 @@ const options = {
   }
 };
 
-const app = createApp(options);
+async function main() {
+  const app = await createApp(options)
+  app.listen({port: PORT}, (error, address) => {
+    if(error) {
+      app.log.error(error);
+      process.exit(1);
+    }
+    app.log.info(`Server is started successfully.`)
+  });
+}
 
-app.listen({port: PORT}, (error, address) => {
-  if(error) {
-    app.log.error(error);
-    process.exit(1);
-  }
-  app.log.info(`Server is started successfully.`)
-});
+main().catch(console.error)
