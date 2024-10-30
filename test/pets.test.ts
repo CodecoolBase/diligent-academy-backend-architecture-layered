@@ -1,10 +1,16 @@
 import { FastifyInstance } from "fastify";
 import createApp from "../src/app"
+import { join } from "node:path";
+import { PathLike, unlinkSync } from "node:fs";
 
 let app: FastifyInstance | undefined;
+let testDataFile: PathLike | undefined;
+
 
 beforeEach(async () => {
-  app = await createApp({ logger: false });
+  const testDataFileName = `test-data-${Date.now()}.json`
+  testDataFile = join(__dirname, 'test-data', testDataFileName)
+  app = await createApp({ logger: false }, testDataFile);
 })
 
 describe('POST /pets', () => {
@@ -51,5 +57,6 @@ describe('GET /pets', () => {
 })
 
 afterEach(() => {
-  app?.close()
+  app?.close();
+  unlinkSync(testDataFile!)
 })

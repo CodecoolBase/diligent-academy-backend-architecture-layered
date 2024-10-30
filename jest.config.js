@@ -5,4 +5,7 @@ module.exports = {
   transform: {
     "^.+.tsx?$": ["ts-jest",{tsconfig: "tsconfig-test.json"}],
   },
+  watchPathIgnorePatterns: ['test-data/*'],
+  testPathIgnorePatterns: ['test-data/*']
+  
 };

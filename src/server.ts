@@ -1,3 +1,4 @@
+import { join } from "node:path";
 import createApp from "./app";
 
 const PORT = 4400;
@@ -9,8 +10,11 @@ const options = {
   }
 };
 
+const dataFile = join(__dirname, '..', 'data.json')
+
+
 async function main() {
-  const app = await createApp(options)
+  const app = await createApp(options, dataFile)
   app.listen({port: PORT}, (error, address) => {
     if(error) {
       app.log.error(error);

@@ -1,6 +1,8 @@
 import fastify from 'fastify';
 import { JsonSchemaToTsProvider } from '@fastify/type-provider-json-schema-to-ts'
 import cors from '@fastify/cors';
+import { readFile, writeFile } from 'node:fs/promises';
+import { PathLike, existsSync, writeFileSync } from 'node:fs';
 
 function getNextId<T extends {id: number}>(items: T[]) {
   if (items.length === 0) {
@@ -11,13 +13,25 @@ function getNextId<T extends {id: number}>(items: T[]) {
   return maxId + 1;
 }
 
-function createStore<T>() {
-  let store: T[] = [];
-  return {
-    read: async () => structuredClone(store),
-    write: async (data: T[]) => store = structuredClone(data)
+class JsonFileStore<T> {
+  constructor(private readonly path: PathLike) {
+    if(!existsSync(this.path)) {
+      writeFileSync(this.path, '[]', 'utf-8');
+    }
   }
+
+  async read() {
+    const content = await readFile(this.path, 'utf-8');
+    const data = JSON.parse(content) as T[];
+    return data 
+  }
+  async write(data: T[]) {
+    const content = JSON.stringify(data, null, 2);
+    await writeFile(this.path, content, 'utf-8');
+  } 
+
 }
+
 
 type Pet = {
   id: number,
@@ -27,11 +41,11 @@ type Pet = {
   age: number,
 }
 
-export default async function createApp(options = {}) {
+export default async function createApp(options = {}, dataFilePath: PathLike) {
   const app = fastify(options).withTypeProvider<JsonSchemaToTsProvider>()
   await app.register(cors, {});
 
-  const petStore = createStore<Pet>();
+  const petStore = new JsonFileStore<Pet>(dataFilePath);
 
   const postPetSchema = {
     body: {
